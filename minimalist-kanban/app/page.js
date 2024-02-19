@@ -23,6 +23,7 @@ export default function Home() {
 			setItems(item.loadObjectsFromStorage());
 			setCategories(category.loadObjectsFromStorage());
 			setLoading(false)
+			return
 		}
 		let manager = new SingletonStorageManager();
 		manager.addItems(items);

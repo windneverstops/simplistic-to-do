@@ -5,6 +5,7 @@ import { BarLoader } from "react-spinners";
 import Key from "./Key";
 import { DndContext } from "@dnd-kit/core";
 import Category from "./Category";
+import "../assets/scroll.css"
 
 const Board = ({ existingCategories = [], loading }) => {
 
@@ -13,8 +14,7 @@ const Board = ({ existingCategories = [], loading }) => {
     const [showInput, setShowInput] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const inputRef = useRef(null);
-    const deleteRef = useRef(null);
-
+  
     useEffect(() => {
         setCategories(existingCategories)
     }, [!loading])
@@ -55,7 +55,7 @@ const Board = ({ existingCategories = [], loading }) => {
 
         const { value } = e.target;
 
-        if (value && value.trim() !== '' && e.key === 'Enter') {
+        if (e.key === 'Enter') {
             const manager = new SingletonStorageManager();
             const newCategory = new category({ "_title": value.trim() });
             manager.addCategory(newCategory);
@@ -114,11 +114,11 @@ const Board = ({ existingCategories = [], loading }) => {
 
                     (showDelete ? <div className="flex items-center justify-center h-screen">
                         <kbd className="flex flex-col items-center text-red-500 text-bold text-2xl">
-                            <div className="py-6">
+                            <p className="py-6 sm: px-6 hyphens-auto">
                                 Are you sure you want to delete the right-most category?
-                            </div>
+                            </p>
 
-                            <div className="md:space-x-20">
+                            <div className="md:space-x-20 text-center flex flex-col sm:flex-row">
                                 <button className="border border-2 border-red-400 bg-red-400 text-white rounded p-2 my-4" onClick={confirmRemoveCategory}>
                                     Yes, delete category
                                 </button>
@@ -127,18 +127,16 @@ const Board = ({ existingCategories = [], loading }) => {
                                 </button>
                             </div>
 
-
-
                         </kbd>
 
                     </div> : <div className="overflow-hidden">
-                        <div className="flex flex-row justify-center items-center h-screen pt-10">
+                        <div className="flex flex-row justify-center items-center h-screen">
 
                             <button
                                 className="p-4"
                                 onClick={addCategory}
                             >
-                                <div className='items-center text-7xl p-4 transform  transition duration-300 hover:text-white'>
+                                <div className='items-center text-7xl p-4 transition duration-300 hover:text-white'>
                                     +
                                 </div>
 
@@ -151,20 +149,14 @@ const Board = ({ existingCategories = [], loading }) => {
                                 </div>
                             }
                             {categories.length > 0 &&
-                                <div className="flex flex-row w-screen overflow-x-auto">
+                                <div className=" flex flex-row w-screen overflow-y-auto">
                                     <DndContext onDragEnd={handleDragEnd} >
                                         {
-
-                                            categories.map((category) => {
-                                                console.log(categories)
-                                                console.log("RUNS")
+                                            categories.map((category, index) => {
+                                               
                                                 return (
 
-                                                    <Category key={category.getId()}>
-                                                        {category.getId()}
-
-                                                    </Category>
-
+                                                    <Category key={category.getId()} categoryId = {category.getId()} setCategories = {setCategories} categories = {categories} index = {index} />
 
                                                 )
                                             })

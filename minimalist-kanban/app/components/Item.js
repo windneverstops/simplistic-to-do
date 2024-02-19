@@ -1,12 +1,19 @@
-const Item = ({item}) =>{
+import SingletonStorageManager from "../scripts/boardSingleton";
+
+const Item = ({itemId}) =>{
+    
+    const item = new SingletonStorageManager().getItem(itemId)  
+    console.log(item.getTitle())
+    console.log(item.getDescription())
     return (
-        <div className="flex flex-col mx-0 pb-0.5 gap-2 p-2 text-inherit  container mx-auto overflow-hidden min-w-[200px] max-w-[300px] border-solid border-2 hover:border-dotted rounded">
-            <div className="text-xl font-bold text-sm text-center">
-                {item.title}
+        <div className="child flex flex-col p-2">
+            <div className="text-xl font-bold text-sm text-center whitespace-pre-wrap hyphens-auto" lang="en">
+                {item.getTitle()}
             </div>
-            <div className="text-xs">
-                {item.description}
+            <div className="text-sm text-center whitespace-pre-wrap hyphens-auto" lang="en">
+                {item.getDescription()}
             </div>
+            
         </div>
         
     )
