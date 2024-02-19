@@ -3,19 +3,28 @@ import category from "./category";
 import sessionboard from "./sessionboard";
 class manager {
     constructor() {
-        this._sessionboard = null;
+        this._sessionboards = {};
         this._categories = {};
         this._items = {};
     }
 
-    getBoard() {
-        return this._sessionboard;
+    getBoard(id) {
+        return this._sessionboards[id];
     }
 
-    
-    setBoard(board) {
-        this._sessionboard = board;
+    getBoards(){
+        return this._sessionboards;
+    }
+
+    addBoard(board) {
+        this._sessionboards[board.getId()] = board;
         
+    }
+
+    addBoards(boards){
+        for (const board of boards){
+            this._sessionboards[board.getId()] = board
+        }
     }
     
     addCategory(categories){
@@ -60,9 +69,11 @@ class manager {
         localStorage.setItem("categoryIdIncrement",category.idIncrement)
         localStorage.setItem("items",JSON.stringify(this._items))
         localStorage.setItem("itemIdIncrement",item.idIncrement)
-        localStorage.setItem("sessionboard",JSON.stringify(this._sessionboard))
+        localStorage.setItem("sessionboards",JSON.stringify(this._sessionboards))
+        localStorage.setItem("sessionboardIdIncrement",sessionboard.idIncrement)
     }
 
+  
 }
 let singletonInstance = null;
 

@@ -4,33 +4,39 @@ import sessionboard from "./scripts/sessionboard"
 import item from "./scripts/item"
 import category from "./scripts/category";
 import SingletonStorageManager from "./scripts/boardSingleton";
-import SelectBoard from "./components/SelectBoard";
 import { useState, useEffect } from "react";
+
 
 export default function Home() {
 	const [items, setItems] = useState([]);
 	const [categories, setCategories] = useState([]);
-	const [board, setBoard] = useState(null);
+	const [loading, setLoading] = useState(true);
+
+
 	
 	useEffect(() =>{
+		/**
+		 * Board may be implemented in the future but for now it's not an intended feature
+		 */
 		
-		setItems(item.loadObjectsFromStorage());
-		setCategories(category.loadObjectsFromStorage());
-		setBoard(sessionboard.loadObjectsFromStorage())
+		if (loading){
+			setItems(item.loadObjectsFromStorage());
+			setCategories(category.loadObjectsFromStorage());
+			setLoading(false)
+		}
 		let manager = new SingletonStorageManager();
 		manager.addItems(items);
 		manager.addCategories(categories);
-		manager.setBoard(board);
 		
-	}, []	
+	}, [categories,items]	
 	)
-	console.log(items)
+	
 	
 	return (
 		<main className=''>
-			<div className="p-8 items-center">
-				<Board board={board}>
-			
+			<div className="items-center">
+				<Board existingCategories  = {categories} loading = {loading}>
+
 				</Board>
 			</div>
 			

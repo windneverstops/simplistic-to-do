@@ -8,9 +8,11 @@ class category{
         this._title = title;
         this._id = id;
         this._itemsId = itemsId;
-        if (itemsId == idIncrement){
+        if (id == category.idIncrement){
             category.idIncrement += 1;
         }
+        
+       
        
     }
 
@@ -95,23 +97,14 @@ class category{
     }
 
     static loadObjectsFromStorage() {
-        /**
-         * Loads objects from local storage
-         */
-        let res;
     
         category.initialLoad();
-        const categories = localStorage.getItem("categories");
-        if (!categories) {
-            res = [];
-        } else {
-            const parsedCategories = JSON.parse(categories);
-            const loadedObjects = parsedCategories.map(categoryDict => new category(categoryDict));
-            res = loadedObjects
+        let categoryPre = JSON.parse(localStorage.getItem("categories"));
+        if(categoryPre == null){
+            return []
         }
+        return Object.values(categoryPre).map(categoryDict => new category(categoryDict));
         
-    
-        return res;
     }
 }
 

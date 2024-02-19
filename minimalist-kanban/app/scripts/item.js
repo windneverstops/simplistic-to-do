@@ -93,21 +93,12 @@ class item{
 
     static loadObjectsFromStorage() {
        
-        let res;
-     
         item.initialLoad();
-        const items = localStorage.getItem("items");
-        if (!items) {
-            res = [];
-        } else {
-            const parsedItems = JSON.parse(items);
-            
-            const loadedObjects = parsedItems.map(itemDict => new item(itemDict));
-            res = loadedObjects
+        let itemPre = JSON.parse(localStorage.getItem("items"));
+        if (itemPre == null){
+            return []
         }
-    
-    
-        return res;
+        return Object.values(itemPre).map(itemDict => new item(itemDict));
     }
 
 }
