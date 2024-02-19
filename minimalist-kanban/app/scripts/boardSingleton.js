@@ -26,6 +26,11 @@ class manager {
             this._sessionboards[board.getId()] = board
         }
     }
+
+    replaceCategoriesWith(categories){
+        this._categories = {}
+        this.addCategories(categories)
+    }
     
     addCategory(categories){
         this._categories[categories.getId()] = categories;
@@ -65,12 +70,28 @@ class manager {
     }
 
     uploadToStorage(){
+
         localStorage.setItem("categories",JSON.stringify(this._categories))
-        localStorage.setItem("categoryIdIncrement",category.idIncrement)
+        if (Object.keys(this._categories).length === 0){
+            localStorage.setItem("categoryIdIncrement",0)
+        }else{
+            localStorage.setItem("categoryIdIncrement",category.idIncrement)
+        }
+
         localStorage.setItem("items",JSON.stringify(this._items))
-        localStorage.setItem("itemIdIncrement",item.idIncrement)
+        if (Object.keys(this._items).length === 0){
+            localStorage.setItem("itemIdIncrement",0)
+        }else{
+            localStorage.setItem("itemIdIncrement",item.idIncrement)
+        }
+        
         localStorage.setItem("sessionboards",JSON.stringify(this._sessionboards))
-        localStorage.setItem("sessionboardIdIncrement",sessionboard.idIncrement)
+        if (Object.keys(this._sessionboards).length === 0){
+            localStorage.setItem("sessionboardIdIncrement", 0)
+        }else{
+            localStorage.setItem("sessionboardIdIncrement", sessionboard.idIncrement)
+        }
+        
     }
 
   

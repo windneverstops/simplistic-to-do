@@ -33,12 +33,12 @@ export default function Home() {
 	
 	
 	return (
-		<main className=''>
-			<div className="items-center">
-				<Board existingCategories  = {categories} loading = {loading}>
+		<main className='max-h-screen'>
+			
+			<Board existingCategories  = {categories} loading = {loading}>
 
-				</Board>
-			</div>
+			</Board>
+			
 			
 		</main>
 	)
