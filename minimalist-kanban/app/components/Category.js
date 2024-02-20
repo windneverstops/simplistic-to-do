@@ -113,7 +113,7 @@ const Category = ({categoryId, setCategories, categories, index}) =>{
 
     return (
         (showInput ?
-            <div className="flex items-center justify-center h-[90vh] w-[200px] m-1">
+            <div className="flex items-center justify-center h-[90vh] w-[225px] m-1">
                 <kbd className="flex flex-col items-center">
                     <input
                         className="text-center whitespace-normal m-4 rounded focus:outline-none focus:ring-1 focus:ring-red-400"
@@ -144,14 +144,14 @@ const Category = ({categoryId, setCategories, categories, index}) =>{
             </div>
         :
         <>  
-            <kbd className="parent flex flex-col min-h-[90vh] min-w-[200px] w-[250px] m-1 " ref={setNodeRef}>
+            <kbd className="parent flex flex-col h-full w-[225px] m-1 " ref={setNodeRef}>
                
                 <span className="text-center text-xl font-bold text-black">
                 {category.getTitle()}
                 </span>
                      
               
-                <div className="border border-1 rounded border-red-400 bg-white h-[83vh] mt-4 mx-1 overflow-y-auto overflow-x-hidden"> 
+                <div className="border border-1 rounded border-red-400 bg-white h-full mt-4 mx-1 overflow-y-auto scroll overflow-x-hidden"> 
                     
                 {           
                     itemsId.map((itemId) =>{   

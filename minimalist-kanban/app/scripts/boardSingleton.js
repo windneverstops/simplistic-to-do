@@ -94,6 +94,13 @@ class manager {
         
     }
 
+    clearStorage(){
+        this._categories = {};
+        this._items = {};
+        this._sessionboards = {};
+        this.uploadToStorage();
+    }
+
   
 }
 let singletonInstance = null;

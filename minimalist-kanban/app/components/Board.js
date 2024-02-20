@@ -13,11 +13,17 @@ const Board = ({ existingCategories = [], loading }) => {
     const [categories, setCategories] = useState([]);
     const [showInput, setShowInput] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
+    const [confirmClear, setConfirmClear] = useState(false);
     const inputRef = useRef(null);
-  
+    const clearRef = useRef(null);
+
+    // Initial loading for existingCategories
+    
     useEffect(() => {
         setCategories(existingCategories)
-    }, [!loading])
+    }, [loading])
+
+    // For new category creation input
 
     useEffect(() => {
         if (showInput && inputRef.current) {
@@ -25,31 +31,13 @@ const Board = ({ existingCategories = [], loading }) => {
         }
     }, [showInput]);
 
-
     const handleInputBlur = () => {
         setShowInput(false);
-
     };
-
-    const handleCancelDelete = () => {
-        setShowDelete(false);
-    }
 
     const addCategory = () => {
         setShowInput(!showInput);
     };
-
-    const handleRemoveCategory = () => {
-        setShowDelete(!showDelete)
-    }
-
-    const confirmRemoveCategory = () => {
-        categories.pop();
-        setCategories(categories);
-        new SingletonStorageManager().replaceCategoriesWith(categories);
-        new SingletonStorageManager().uploadToStorage()
-        setShowDelete(false);
-    }
 
     const handleInputChange = (e) => {
 
@@ -70,11 +58,58 @@ const Board = ({ existingCategories = [], loading }) => {
 
     };
 
+    // For deleting a category
+
+    const handleCancelDelete = () => {
+        setShowDelete(false);
+    }
+
+    const handleRemoveCategory = () => {
+        setShowDelete(!showDelete);
+    }
+
+    const confirmRemoveCategory = () => {
+        categories.pop();
+        setCategories(categories);
+        new SingletonStorageManager().replaceCategoriesWith(categories);
+        new SingletonStorageManager().uploadToStorage();
+        setShowDelete(false);
+    }
+
+    // Handling drag
+
     const handleDragEnd = (e) => {
         const itemId = e.activatorEvent.srcElement.id;
     }
 
+    // For clearing the local storage
 
+    const handleClearClick = () => {
+        if (confirmClear) {
+            setConfirmClear(false);
+            new SingletonStorageManager().clearStorage();
+            setCategories([]);
+        } else {
+            setConfirmClear(true);
+        }
+    };
+
+    const handleOutsideClickForClear = (event) => {
+        if (confirmClear && !clearRef.current.contains(event.target)) {
+            setConfirmClear(false);
+        }
+    };
+
+    useEffect(() => {
+        if (confirmClear) {
+            document.addEventListener("click", handleOutsideClickForClear);
+        } else {
+            document.removeEventListener("click", handleOutsideClickForClear);
+        }
+        return () => {
+            document.removeEventListener("click", handleOutsideClickForClear);
+        };
+    }, [confirmClear]);
 
 
     return (
@@ -129,7 +164,7 @@ const Board = ({ existingCategories = [], loading }) => {
 
                         </kbd>
 
-                    </div> : <div className="overflow-hidden">
+                    </div> : <div className="flex flex-col overflow-hidden h-screen p-6">
                         <div className="flex flex-row justify-center items-center h-screen">
 
                             <button
@@ -141,22 +176,20 @@ const Board = ({ existingCategories = [], loading }) => {
                                 </div>
 
                             </button>
-
-
                             {!categories.length &&
-                                <div className="flex flex-row w-screen items-center justify-center overflow-x-auto">
+                                <div className="flex flex-row w-screen items-center justify-center">
                                     <p>No categories</p>
                                 </div>
                             }
                             {categories.length > 0 &&
-                                <div className=" flex flex-row w-screen overflow-y-auto">
-                                    <DndContext onDragEnd={handleDragEnd} >
+                                <div className="flex flex-row w-screen h-full">
+                                    <DndContext onDragEnd={handleDragEnd} className="">
                                         {
                                             categories.map((category, index) => {
-                                               
+
                                                 return (
 
-                                                    <Category key={category.getId()} categoryId = {category.getId()} setCategories = {setCategories} categories = {categories} index = {index} />
+                                                    <Category key={category.getId()} categoryId={category.getId()} setCategories={setCategories} categories={categories} index={index} />
 
                                                 )
                                             })
@@ -177,8 +210,11 @@ const Board = ({ existingCategories = [], loading }) => {
 
                             </button>
                         </div>
-                        <div className="absolute inset-x-0 bottom-0 text-center text-gray-400 select-none">
-
+                        <div className="text-center m-2 font-bold">
+                            <button ref={clearRef} onClick={handleClearClick}><Key>{confirmClear ? "Are you sure?" : "Clear"}</Key></button>
+                           
+                        </div>
+                        <div className="text-center text-gray-400 select-none">
                             <p className="whitespace-wrap">
                                 Adds categories to the left, removes categories from the right. Categories and items are draggable. @windneverstop on github
                             </p>
