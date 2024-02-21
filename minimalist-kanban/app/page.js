@@ -1,6 +1,5 @@
 "use client";
 import Board from "./components/Board"
-import sessionboard from "./scripts/sessionboard"
 import item from "./scripts/item"
 import category from "./scripts/category";
 import SingletonStorageManager from "./scripts/boardSingleton";

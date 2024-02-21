@@ -1,5 +1,4 @@
 import SingletonStorageManager from "../scripts/boardSingleton";
-import { useDroppable } from "@dnd-kit/core";
 import Item from "./Item";
 import item from "../scripts/item";
 import Key from "./Key";

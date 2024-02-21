@@ -5,14 +5,10 @@ import { BarLoader } from "react-spinners";
 import Key from "./Key";
 import { DragDropContext } from "@hello-pangea/dnd";
 import Category from "./Category";
-import "../assets/scroll.css"
+import "../styles/scroll.css"
 import React from "react";
 
 
-// Add keyboard shortcuts to make this even better
-// Add colour selector
-// Add help popup modal for keyboard shortcuts
-// Remember to have MVP, however
 
 const Board = ({ existingCategories = [], loading}) => {
 
