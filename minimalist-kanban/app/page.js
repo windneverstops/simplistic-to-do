@@ -4,6 +4,7 @@ import item from "./scripts/item"
 import category from "./scripts/category";
 import SingletonStorageManager from "./scripts/boardSingleton";
 import { useState, useEffect } from "react";
+import Category from "./components/Category";
 
 
 // Add keyboard shortcuts to make this even better
