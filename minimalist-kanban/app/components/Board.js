@@ -3,14 +3,21 @@ import category from "../scripts/category";
 import SingletonStorageManager from "../scripts/boardSingleton";
 import { BarLoader } from "react-spinners";
 import Key from "./Key";
-import { DndContext } from "@dnd-kit/core";
+import { DragDropContext } from "@hello-pangea/dnd";
 import Category from "./Category";
 import "../assets/scroll.css"
+import React from "react";
 
-const Board = ({ existingCategories = [], loading }) => {
+
+// Add keyboard shortcuts to make this even better
+// Add colour selector
+// Add help popup modal for keyboard shortcuts
+// Remember to have MVP, however
+
+const Board = ({ existingCategories = [], loading}) => {
 
 
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState();
     const [showInput, setShowInput] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [confirmClear, setConfirmClear] = useState(false);
@@ -18,7 +25,7 @@ const Board = ({ existingCategories = [], loading }) => {
     const clearRef = useRef(null);
 
     // Initial loading for existingCategories
-    
+
     useEffect(() => {
         setCategories(existingCategories)
     }, [loading])
@@ -48,7 +55,7 @@ const Board = ({ existingCategories = [], loading }) => {
             const newCategory = new category({ "_title": value.trim() });
             manager.addCategory(newCategory);
             manager.uploadToStorage();
-            categories.push(newCategory);
+            categories.unshift(newCategory);
             setCategories(categories);
             setShowInput(false);
             e.target.value = ''; // Clear the input field after adding the category
@@ -77,11 +84,39 @@ const Board = ({ existingCategories = [], loading }) => {
     }
 
     // Handling drag
+    
+    const onDragEnd = (e) =>{
 
-    const handleDragEnd = (e) => {
-        const itemId = e.activatorEvent.srcElement.id;
+        if (e.destination == null){
+            return
+        }
+
+        const sourceCategoryId = parseInt(e.source.droppableId)
+        const destinationCategoryId = parseInt(e.destination.droppableId)
+        const itemId = parseInt(e.draggableId)
+
+        const retCategories = [];
+        
+        for (const category of categories) {
+            if (category.getId() === sourceCategoryId) {
+               
+                category._itemsId = category.getItemsId().filter((id) => id !== itemId);
+            }
+            if (category.getId() === destinationCategoryId) {
+               
+                category._itemsId.push(itemId);
+            }
+            retCategories.push(category);
+        }
+        
+        console.log(categories)
+        setCategories(retCategories); 
+        new SingletonStorageManager().replaceCategoriesWith(retCategories);
+        new SingletonStorageManager().uploadToStorage();
+        console.log(categories)
+        
     }
-
+    
     // For clearing the local storage
 
     const handleClearClick = () => {
@@ -99,6 +134,8 @@ const Board = ({ existingCategories = [], loading }) => {
             setConfirmClear(false);
         }
     };
+
+    
 
     useEffect(() => {
         if (confirmClear) {
@@ -147,7 +184,7 @@ const Board = ({ existingCategories = [], loading }) => {
                     </div>
                     :
 
-                    (showDelete ? <div className="flex items-center justify-center h-screen">
+                    (showDelete ? <div className="flex items-center justify-center h-full">
                         <kbd className="flex flex-col items-center text-red-500 text-bold text-2xl">
                             <p className="py-6 sm: px-6 hyphens-auto">
                                 Are you sure you want to delete the right-most category?
@@ -164,55 +201,58 @@ const Board = ({ existingCategories = [], loading }) => {
 
                         </kbd>
 
-                    </div> : <div className="flex flex-col overflow-hidden h-screen p-6">
-                        <div className="flex flex-row justify-center items-center h-screen">
+                    </div> 
+                    : 
+                    <div className="flex flex-col h-full">
+                        <div className="overflow-y-hidden h-full">
+                            <div className="flex flex-row justify-center items-center h-full">
+                                <button
+                                    className="p-4"
+                                    onClick={addCategory}
+                                >
+                                    <div className='items-center text-7xl p-4 transition duration-300 hover:text-white'>
+                                        +
+                                    </div>
 
-                            <button
-                                className="p-4"
-                                onClick={addCategory}
-                            >
-                                <div className='items-center text-7xl p-4 transition duration-300 hover:text-white'>
-                                    +
-                                </div>
+                                </button>
+                                {!categories.length &&
+                                    <div className="flex flex-row w-screen h-full items-center justify-center">
+                                        <p>No categories</p>
+                                    </div>
+                                }
+                                {categories.length > 0 &&
+                                    <div className="flex flex-row w-full h-full overflow-x-auto scroll gap-x-6">
+                                        <DragDropContext onDragEnd={onDragEnd}>
+                                            {
+                                                categories.map((category, index) => {
+                                                    
+                                                    return (
 
-                            </button>
-                            {!categories.length &&
-                                <div className="flex flex-row w-screen items-center justify-center">
-                                    <p>No categories</p>
-                                </div>
-                            }
-                            {categories.length > 0 &&
-                                <div className="flex flex-row w-screen h-full">
-                                    <DndContext onDragEnd={handleDragEnd} className="">
-                                        {
-                                            categories.map((category, index) => {
+                                                        <Category key={category.getId()} categoryId={category.getId()} setCategories={setCategories} categories={categories} index={index} />
 
-                                                return (
+                                                    )
+                                                })
 
-                                                    <Category key={category.getId()} categoryId={category.getId()} setCategories={setCategories} categories={categories} index={index} />
+                                            }
+                                        </DragDropContext>
 
-                                                )
-                                            })
-
-                                        }
-                                    </DndContext>
-
-                                </div>}
+                                    </div>}
 
 
-                            <button
-                                className="p-4"
-                                onClick={handleRemoveCategory}
-                            >
-                                <div className='items-center text-7xl p-4 hover:text-white transition transition-300'>
-                                    -
-                                </div>
+                                <button
+                                    className="p-4"
+                                    onClick={handleRemoveCategory}
+                                >
+                                    <div className='items-center text-7xl p-4 hover:text-white transition transition-300'>
+                                        -
+                                    </div>
 
-                            </button>
+                                </button>
+                            </div>
                         </div>
                         <div className="text-center m-2 font-bold">
                             <button ref={clearRef} onClick={handleClearClick}><Key>{confirmClear ? "Are you sure?" : "Clear"}</Key></button>
-                           
+
                         </div>
                         <div className="text-center text-gray-400 select-none">
                             <p className="whitespace-wrap">

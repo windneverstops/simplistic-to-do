@@ -7,6 +7,12 @@ import SingletonStorageManager from "./scripts/boardSingleton";
 import { useState, useEffect } from "react";
 
 
+// Add keyboard shortcuts to make this even better
+// Add colour/theme selector
+// Add help popup modal for keyboard shortcuts
+
+
+
 export default function Home() {
 	const [items, setItems] = useState([]);
 	const [categories, setCategories] = useState([]);
@@ -34,7 +40,7 @@ export default function Home() {
 	
 	
 	return (
-		<main className='max-h-screen'>
+		<main className='h-screen p-6 pt-12'>
 			
 			<Board existingCategories  = {categories} loading = {loading}>
 

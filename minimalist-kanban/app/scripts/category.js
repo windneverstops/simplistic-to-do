@@ -11,8 +11,6 @@ class category{
         if (id == category.idIncrement){
             category.idIncrement += 1;
         }
-        
-       
        
     }
 

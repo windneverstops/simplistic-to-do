@@ -70,7 +70,7 @@ class item{
             for (let i = 0; i < category.getItemsId().length; i++){
                 if (category.getItemsId()[i] == this._id){
                     category.getItemsId().splice(i,1)
-                    done = True;
+                    done = true;
                     break;
                 }
             }  

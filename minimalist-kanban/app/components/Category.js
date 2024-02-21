@@ -4,86 +4,66 @@ import Item from "./Item";
 import item from "../scripts/item";
 import Key from "./Key";
 import { useEffect, useState, useRef } from "react";
-const Category = ({categoryId, setCategories, categories, index}) =>{
+import { Droppable } from "@hello-pangea/dnd";
+
+const Category = ({ categoryId, setCategories, categories, index }) => {
 
     const category = new SingletonStorageManager().getCategory(categoryId);
-    const [itemsId, setItemsId] = useState([]);
+    const itemsId = category.getItemsId();
     const [showInput, setShowInput] = useState(false);
-    const [loading, setLoading] = useState(true);
     const titleRef = useRef(null);
     const descriptionRef = useRef(null);
+
+
 
     useEffect(() => {
         if (showInput && titleRef.current) {
             titleRef.current.focus();
         }
-        }, [showInput]);
+    }, [showInput]);
 
-    useEffect(() => {
-        if (loading){
-            const res = [];
-        
-            for (const id of category.getItemsId()){
-                res.push(id)
-            }  
-            
-            setItemsId(res);
-            setLoading(!loading);
-            
-        }
-   
-        console.log(itemsId)
-    }, [itemsId])
 
-    const handleInputBlur = (e) =>{
-       
-        console.log(e)
-        if (e.relatedTarget == null){
+    const handleInputBlur = (e) => {
+
+        if (e.relatedTarget == null) {
             setShowInput(false);
         }
     }
 
-   
+
 
     const addItem = () => {
-            setShowInput(!showInput);
-        };
+        setShowInput(!showInput);
+    };
 
     const handleInputChange = (e) => {
 
-        if (e.key === 'Enter' && e.shiftKey){
+        if (e.key === 'Enter' && e.shiftKey) {
             e.target.value += '\n'
-            
-        }else if (e.key === 'Enter') {
+
+        } else if (e.key === 'Enter') {
             const manager = new SingletonStorageManager();
             const title = titleRef.current.value == "" ? "untitled" : titleRef.current.value
-            const newItem = new item({ "_title": title, "_description":descriptionRef.current.value });
+            const newItem = new item({ "_title": title, "_description": descriptionRef.current.value });
             category.addItemId(newItem.getId())
             manager.addItem(newItem);
             manager.uploadToStorage();
-            itemsId.push(newItem.getId());
-            
             setShowInput(false);
-            setItemsId(itemsId);
             e.target.value = ''; // Clear the input field after adding the item
         } else if (e.key === "Escape") {
             setShowInput(false);
         }
 
+    };
 
-        };
 
-
-    const {setNodeRef} = useDroppable({
-        id: categoryId,
-    });
 
     const leftMost = () => {
         const updatedCategories = [...categories];
         updatedCategories.unshift(updatedCategories.splice(index, 1)[0]);
         setCategories(updatedCategories);
     };
-    
+
     const left = () => {
         if (index > 0 && index <= categories.length - 1 && categories.length >= 2) {
             const updatedCategories = [...categories];
@@ -91,7 +71,7 @@ const Category = ({categoryId, setCategories, categories, index}) =>{
             setCategories(updatedCategories);
         }
     };
-    
+
     const right = () => {
         if (index >= 0 && index < categories.length - 1 && categories.length >= 2) {
             const updatedCategories = [...categories];
@@ -99,21 +79,16 @@ const Category = ({categoryId, setCategories, categories, index}) =>{
             setCategories(updatedCategories);
         }
     };
-    
+
     const rightMost = () => {
         const updatedCategories = [...categories];
         updatedCategories.push(updatedCategories.splice(index, 1)[0]);
         setCategories(updatedCategories);
     };
 
-   
-    
-    
-
-
     return (
         (showInput ?
-            <div className="flex items-center justify-center h-[90vh] w-[225px] m-1">
+            <div className="flex items-center justify-center h-full w-[250px] min-w-[250px]">
                 <kbd className="flex flex-col items-center">
                     <input
                         className="text-center whitespace-normal m-4 rounded focus:outline-none focus:ring-1 focus:ring-red-400"
@@ -142,39 +117,61 @@ const Category = ({categoryId, setCategories, categories, index}) =>{
                 </kbd>
 
             </div>
-        :
-        <>  
-            <kbd className="parent flex flex-col h-full w-[225px] m-1 " ref={setNodeRef}>
-               
-                <span className="text-center text-xl font-bold text-black">
-                {category.getTitle()}
-                </span>
-                     
-              
-                <div className="border border-1 rounded border-red-400 bg-white h-full mt-4 mx-1 overflow-y-auto scroll overflow-x-hidden"> 
-                    
-                {           
-                    itemsId.map((itemId) =>{   
-                        return <Item itemId = {itemId} key = {itemId}></Item>
-                    })  
+            :
+            <>
+                <kbd className="flex flex-col h-full w-[250px] min-w-[250px]">
 
-                }
-                    
-                    
-                </div>
-                <div className="flex flex-row justify-around">
-                    <button onClick={leftMost} className={`text-3xl hover:text-white transition duration-300 tracking-[-0.3em]`}>{"<<"}</button>
-                    <button onClick={left} className="text-3xl hover:text-white transition duration-300">{"<"}</button>
-                    <button onClick={addItem} className="text-3xl hover:text-white transition duration-300">+</button>
-                    <button onClick={right} className="text-3xl hover:text-white transition duration-300">{">"}</button>
-                    <button onClick={rightMost} className="text-3xl hover:text-white transition duration-300 tracking-[-0.3em]">{">>"}</button>
-                </div>
-                
-            </kbd>
-            
-        </>)
-        
-        
+                    <span className="text-center text-xl font-bold text-black flex-none w-full">
+                        <Key>{category.getTitle()}</Key>
+                    </span>
+
+                    <div className="grow border border-1 rounded-md border-white bg-red-300 overflow-y-auto scroll p-2 overflow-x-hidden">
+                        <Droppable
+                            droppableId={categoryId.toString()}
+                          
+                            className="h-full"
+                        >
+                            {(provided, snapshot) => (
+                                <div
+                                    ref={provided.innerRef}
+                                    {...provided.droppableProps}
+                                    className="h-full flex flex-col gap-y-2"
+                                >   
+                                       
+                                 
+                                        {
+                                            itemsId.map((itemId, index) => {
+                                                return <Item itemId={itemId} key={itemId} itemsId={itemsId} index={index}></Item>
+                                            })
+
+                                        }
+                                 
+
+                                    {provided.placeholder}
+                                </div>
+                            )}
+
+                        </Droppable>
+
+
+                    </div>
+
+
+                    <div className="flex-none flex flex-row justify-around">
+                        <button onClick={leftMost} className={`text-3xl hover:text-white transition duration-300 tracking-[-0.2em]`}>{"<<"}</button>
+                        <button onClick={left} className="text-3xl hover:text-white transition duration-300">{"<"}</button>
+                        <button onClick={addItem} className="text-3xl hover:text-white transition duration-300">+</button>
+                        <button onClick={right} className="text-3xl hover:text-white transition duration-300">{">"}</button>
+                        <button onClick={rightMost} className="text-3xl hover:text-white transition duration-300 tracking-[-0.2em]">{">>"}</button>
+                    </div>
+
+                </kbd>
+
+
+
+            </>)
+
+
     )
 }
 export default Category;
