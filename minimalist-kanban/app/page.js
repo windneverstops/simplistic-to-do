@@ -34,7 +34,7 @@ export default function Home() {
 		manager.addItems(items);
 		manager.addCategories(categories);
 		
-	}, [categories,items]	
+	}, [categories,items, loading]	
 	)
 	
 	

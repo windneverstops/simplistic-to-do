@@ -13,7 +13,7 @@ import React from "react";
 const Board = ({ existingCategories = [], loading}) => {
 
 
-    const [categories, setCategories] = useState();
+    const [categories, setCategories] = useState([]);
     const [showInput, setShowInput] = useState(false);
     const [showDelete, setShowDelete] = useState(false);
     const [confirmClear, setConfirmClear] = useState(false);
@@ -105,11 +105,11 @@ const Board = ({ existingCategories = [], loading}) => {
             retCategories.push(category);
         }
         
-        console.log(categories)
+     
         setCategories(retCategories); 
         new SingletonStorageManager().replaceCategoriesWith(retCategories);
         new SingletonStorageManager().uploadToStorage();
-        console.log(categories)
+  
         
     }
     
@@ -142,7 +142,7 @@ const Board = ({ existingCategories = [], loading}) => {
         return () => {
             document.removeEventListener("click", handleOutsideClickForClear);
         };
-    }, [confirmClear]);
+    }, [confirmClear, handleOutsideClickForClear]);
 
 
     return (
@@ -183,15 +183,15 @@ const Board = ({ existingCategories = [], loading}) => {
                     (showDelete ? <div className="flex items-center justify-center h-full">
                         <kbd className="flex flex-col items-center text-red-500 text-bold text-2xl">
                             <p className="py-6 sm: px-6 hyphens-auto">
-                                Are you sure you want to delete the right-most category?
+                                <p>Are you sure you want to delete the right-most category?</p>
                             </p>
 
                             <div className="md:space-x-20 text-center flex flex-col sm:flex-row">
                                 <button className="border border-2 border-red-400 bg-red-400 text-white rounded p-2 my-4" onClick={confirmRemoveCategory}>
-                                    Yes, delete category
+                                    <p>Yes, delete category</p>
                                 </button>
-                                <button className="border border-2 border-white text-white rounded p-2 my-4" onClick={handleCancelDelete}>
-                                    No, don't delete category
+                                <button className="border border-4 border-white text-white rounded p-2 my-4" onClick={handleCancelDelete}>
+                                    <p>No, don't delete category</p>
                                 </button>
                             </div>
 
