@@ -1,6 +1,6 @@
-import SingletonStorageManager from "../scripts/boardSingleton";
+import SingletonStorageManager from "../scripts/localStorageScripts/boardSingleton";
 import Item from "./Item";
-import item from "../scripts/item";
+import item from "../scripts/classes/item";
 import Key from "./Key";
 import { useEffect, useState, useRef } from "react";
 import { Droppable } from "@hello-pangea/dnd";

@@ -1,5 +1,5 @@
 import { useEffect, useState} from 'react';
-import SingletonStorageManager from './boardSingleton';
+import SingletonStorageManager from '../localStorageScripts/boardSingleton';
 class sessionboard{
 
     static idIncrement = 0;

@@ -1,8 +1,8 @@
 "use client";
 import Board from "./components/Board"
-import item from "./scripts/item"
-import category from "./scripts/category";
-import SingletonStorageManager from "./scripts/boardSingleton";
+import item from "./scripts/classes/item"
+import category from "./scripts/classes/category";
+import SingletonStorageManager from "./scripts/localStorageScripts/boardSingleton";
 import { useState, useEffect } from "react";
 
 

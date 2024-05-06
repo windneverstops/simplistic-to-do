@@ -1,4 +1,4 @@
-import SingletonStorageManager from "./boardSingleton";
+import SingletonStorageManager from "../localStorageScripts/boardSingleton";
 class item{
 
     static idIncrement = 0;

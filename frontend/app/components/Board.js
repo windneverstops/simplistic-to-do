@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import category from "../scripts/category";
-import SingletonStorageManager from "../scripts/boardSingleton";
+import category from "../scripts/classes/category";
+import SingletonStorageManager from "../scripts/localStorageScripts/boardSingleton";
 import { BarLoader } from "react-spinners";
 import Key from "./Key";
 import { DragDropContext } from "@hello-pangea/dnd";

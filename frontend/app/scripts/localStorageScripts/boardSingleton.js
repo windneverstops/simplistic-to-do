@@ -1,6 +1,6 @@
-import item from "./item";
-import category from "./category";
-import sessionboard from "./sessionboard";
+import item from "../classes/item";
+import category from "../classes/category";
+import sessionboard from "../classes/sessionboard";
 class manager {
     constructor() {
         this._sessionboards = {};
