@@ -189,7 +189,7 @@ const Board = ({ existingCategories = [], loading }) => {
                   <p>Yes, delete category</p>
                 </button>
                 <button className="border border-4 border-white text-white rounded p-2 my-4" onClick={handleCancelDelete}>
-                  <p>No, don't delete category</p>
+                  <p>No, don&apos;t delete category</p>
                 </button>
               </div>
             </kbd>
