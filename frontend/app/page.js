@@ -1,8 +1,8 @@
 "use client";
 import Board from "./components/Board"
-import item from "./scripts/item"
-import category from "./scripts/category";
-import SingletonStorageManager from "./scripts/boardSingleton";
+import item from "./scripts/classes/item"
+import category from "./scripts/classes/category";
+import SingletonStorageManager from "./scripts/localStorageScripts/boardSingleton";
 import { useState, useEffect } from "react";
 
 // Add keyboard shortcuts to make this even better
@@ -16,8 +16,6 @@ export default function Home() {
 	const [categories, setCategories] = useState([]);
 	const [loading, setLoading] = useState(true);
 
-
-	
 	useEffect(() =>{
 		/**
 		 * Board may be implemented in the future but for now it's not an intended feature
@@ -33,18 +31,13 @@ export default function Home() {
 		manager.addItems(items);
 		manager.addCategories(categories);
 		
-	}, [categories,items, loading]	
+	}, [categories, items, loading]	
 	)
 	
 	
 	return (
-		<main className='h-screen p-6 pt-12'>
-			
-			<Board existingCategories  = {categories} loading = {loading}>
-
-			</Board>
-			
-			
+		<main className='h-screen p-6 pt-12'>		
+			<Board existingCategories  = {categories} loading = {loading}/>
 		</main>
 	)
 }

@@ -1,4 +1,4 @@
-import SingletonStorageManager from "../scripts/boardSingleton";
+import SingletonStorageManager from "../scripts/localStorageScripts/boardSingleton";
 import { useRef, useState } from "react";
 import { Draggable } from "@hello-pangea/dnd";
 
