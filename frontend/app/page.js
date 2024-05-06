@@ -36,7 +36,7 @@ export default function Home() {
 	
 	
 	return (
-		<main className='h-screen p-6 pt-12'>		
+		<main className='grow p-6 pt-12'>		
 			<Board existingCategories  = {categories} loading = {loading}/>
 		</main>
 	)
