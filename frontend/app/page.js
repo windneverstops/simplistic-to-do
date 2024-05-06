@@ -17,8 +17,6 @@ export default function Home() {
 	const [categories, setCategories] = useState([]);
 	const [loading, setLoading] = useState(true);
 
-
-	
 	useEffect(() =>{
 		/**
 		 * Board may be implemented in the future but for now it's not an intended feature
@@ -34,18 +32,13 @@ export default function Home() {
 		manager.addItems(items);
 		manager.addCategories(categories);
 		
-	}, [categories,items, loading]	
+	}, [categories, items, loading]	
 	)
 	
 	
 	return (
-		<main className='h-screen p-6 pt-12'>
-			
-			<Board existingCategories  = {categories} loading = {loading}>
-
-			</Board>
-			
-			
+		<main className='h-screen p-6 pt-12'>		
+			<Board existingCategories  = {categories} loading = {loading}/>
 		</main>
 	)
 }
