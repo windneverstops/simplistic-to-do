@@ -5,7 +5,6 @@ import category from "./scripts/classes/category";
 import SingletonStorageManager from "./scripts/localStorageScripts/boardSingleton";
 import { useState, useEffect } from "react";
 
-
 // Add keyboard shortcuts to make this even better
 // Add colour/theme selector
 // Add help popup modal for keyboard shortcuts
