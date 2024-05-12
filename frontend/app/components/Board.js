@@ -31,7 +31,6 @@ const Board = ({ boardIndex }) => {
     }
 
   }, [data])
-
   // Handling inputs and its logic
   useEffect(() => {
     if (showInput && inputRef.current) {
@@ -53,7 +52,6 @@ const Board = ({ boardIndex }) => {
 
     if (e.key === 'Enter') {
       const newCategory = { "title": value.trim(), "tasks": []}
-      console.log(data)
       const newData = [...data]
       newData[boardIndex].categories.unshift(newCategory)
       updateData(newData)

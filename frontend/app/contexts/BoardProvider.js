@@ -11,7 +11,7 @@ const BoardProvider = ( { children }) => {
 
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  console.log(data)
+
 	useEffect(() => {
 		/**
 		 * Board may be implemented in the future but for now it's not an intended feature
