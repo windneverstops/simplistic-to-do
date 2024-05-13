@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import category from "../scripts/classes/category";
-import SingletonStorageManager from "../scripts/localStorageScripts/boardSingleton";
 import { BarLoader } from "react-spinners";
 import Key from "./Key";
 import { DragDropContext } from "@hello-pangea/dnd";
@@ -95,8 +93,7 @@ const Board = ({ boardIndex }) => {
     data[boardIndex].categories[sourceCategoryIndex].tasks.splice(itemIndex, 1)
     data[boardIndex].categories[destinationCategoryIndex].tasks.splice(orderIndex, 0, item)
     updateData([...data])
-    console.log(data)
-    
+  
   }
 
   // For clearing the local storage

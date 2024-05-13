@@ -6,8 +6,6 @@ const Item = ({ item, itemIndex, boardIndex, categoryIndex }) => {
 
 	const { data, updateData } = useBoardDataContext();
 	const [isHovered, setIsHovered] = useState(false);
-	const [isDeleted, setDeleted] = useState(false);
-
 	const itemRef = useRef(null);
 
 	const handleHover = () => {
@@ -44,10 +42,9 @@ const Item = ({ item, itemIndex, boardIndex, categoryIndex }) => {
 				>
 					<div ref={itemRef} className="flex flex-col p-2 bg-red-400 rounded-md my-1" onMouseEnter={handleHover} onMouseLeave={handleEndHover}>
 						<div className="grid grid-rows-1 grid-cols-1 " >
-							<div className="text-xl row-start-1 col-start-1 font-bold text-sm text-center text-white whitespace-pre-wrap hyphens-auto" lang="en">
+							<div className="text-xl row-start-1 col-start-1 font-bold text-center text-white whitespace-pre-wrap hyphens-auto" lang="en">
 								{item.title}
 							</div>
-
 							{isHovered && <div className="row-start-1 col-start-1 font-bold text-sm text-end text-white">
 								<button className="border rounded-full px-1 bg-red-400 hover:bg-red-300" onClick={onDelete}>X</button>
 							</div>}
