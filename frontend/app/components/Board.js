@@ -86,16 +86,17 @@ const Board = ({ boardIndex }) => {
     if (e.destination == null) {
       return
     }
-
+    
     const sourceCategoryIndex = parseInt(e.source.droppableId)
     const destinationCategoryIndex = parseInt(e.destination.droppableId)
-    const itemIndex = e.draggableId.split(',').map(Number)[-1]
+    const itemIndex = e.draggableId.split(',').map(Number)[2]
     const item = data[boardIndex].categories[sourceCategoryIndex].tasks[itemIndex]
-
+    const orderIndex = e.destination.index
     data[boardIndex].categories[sourceCategoryIndex].tasks.splice(itemIndex, 1)
-    data[boardIndex].categories[destinationCategoryIndex].tasks.push(item)
-
+    data[boardIndex].categories[destinationCategoryIndex].tasks.splice(orderIndex, 0, item)
     updateData([...data])
+    console.log(data)
+    
   }
 
   // For clearing the local storage
@@ -169,10 +170,10 @@ const Board = ({ boardIndex }) => {
               </p>
 
               <div className="md:space-x-20 text-center flex flex-col sm:flex-row">
-                <button className="border border-2 border-red-400 bg-red-400 text-white rounded p-2 my-4" onClick={confirmRemoveCategory}>
+                <button className="border-2 border-red-400 bg-red-400 text-white rounded p-2 my-4" onClick={confirmRemoveCategory}>
                   Yes, delete category
                 </button>
-                <button className="border border-4 border-white text-white rounded p-2 my-4" onClick={handleCancelDelete}>
+                <button className="border-4 border-white text-white rounded p-2 my-4" onClick={handleCancelDelete}>
                   No, don&apos;t delete category
                 </button>
               </div>

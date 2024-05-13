@@ -127,7 +127,7 @@ const Category = ({ category, categoryIndex, boardIndex }) => {
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="h-full flex flex-col gap-y-2"
+                  className="h-full flex flex-col"
                 >
                   {
                     items.map((item, index) => {

@@ -42,7 +42,7 @@ const Item = ({ item, itemIndex, boardIndex, categoryIndex }) => {
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
 				>
-					<div ref={itemRef} className="flex flex-col p-2 bg-red-400 rounded-md" onMouseEnter={handleHover} onMouseLeave={handleEndHover}>
+					<div ref={itemRef} className="flex flex-col p-2 bg-red-400 rounded-md my-1" onMouseEnter={handleHover} onMouseLeave={handleEndHover}>
 						<div className="grid grid-rows-1 grid-cols-1 " >
 							<div className="text-xl row-start-1 col-start-1 font-bold text-sm text-center text-white whitespace-pre-wrap hyphens-auto" lang="en">
 								{item.title}
