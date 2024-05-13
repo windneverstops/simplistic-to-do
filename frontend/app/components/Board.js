@@ -165,15 +165,15 @@ const Board = ({ boardIndex }) => {
           (showDelete ? <div className="flex items-center justify-center h-full">
             <kbd className="flex flex-col items-center text-red-500 text-bold text-2xl">
               <p className="py-6 sm: px-6 hyphens-auto">
-                <p>Are you sure you want to delete the right-most category?</p>
+                Are you sure you want to delete the right-most category?
               </p>
 
               <div className="md:space-x-20 text-center flex flex-col sm:flex-row">
                 <button className="border border-2 border-red-400 bg-red-400 text-white rounded p-2 my-4" onClick={confirmRemoveCategory}>
-                  <p>Yes, delete category</p>
+                  Yes, delete category
                 </button>
                 <button className="border border-4 border-white text-white rounded p-2 my-4" onClick={handleCancelDelete}>
-                  <p>No, don&apos;t delete category</p>
+                  No, don&apos;t delete category
                 </button>
               </div>
             </kbd>

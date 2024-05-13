@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
 import { Draggable } from "@hello-pangea/dnd";
+import { useBoardDataContext } from "../contexts/BoardProvider";
 
 const Item = ({ item, itemIndex, boardIndex, categoryIndex }) => {
 
+	const { data, updateData } = useBoardDataContext();
 	const [isHovered, setIsHovered] = useState(false);
 	const [isDeleted, setDeleted] = useState(false);
 
@@ -24,16 +26,15 @@ const Item = ({ item, itemIndex, boardIndex, categoryIndex }) => {
 	}
 
 	const onDelete = () => {
-
-		setDeleted(true);
-
-
+		data[boardIndex].categories[categoryIndex].tasks.splice(itemIndex, 1)
+		updateData([...data])
 	}
 
 
 	return (
-		(!isDeleted && <Draggable draggableId={[boardIndex, categoryIndex, itemIndex]}
-
+		<Draggable 
+			draggableId={[boardIndex, categoryIndex, itemIndex].toString()} 
+			index={itemIndex}
 		>
 			{(provided, snapshot) => (
 				<div
@@ -58,10 +59,7 @@ const Item = ({ item, itemIndex, boardIndex, categoryIndex }) => {
 
 				</div>
 			)}
-
-
 		</Draggable>)
 
-	)
 }
 export default Item;

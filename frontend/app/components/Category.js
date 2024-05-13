@@ -55,23 +55,31 @@ const Category = ({ category, categoryIndex, boardIndex }) => {
   // Shift categories left or right
 
   const leftMost = () => {
-
+		data[boardIndex].categories.splice(categoryIndex, 1)
+		data[boardIndex].categories.unshift(category)
+		updateData([...data])
   };
 
   const left = () => {
-    if (categoryIndex > 0 && categoryIndex <= categories.length - 1 && categories.length >= 2) {
-
-    }
+    if (categoryIndex > 0) {
+			data[boardIndex].categories[categoryIndex] = data[boardIndex].categories[categoryIndex- 1];
+			data[boardIndex].categories[categoryIndex - 1] = category;
+			updateData([...data])
+		}
   };
 
   const right = () => {
-    if (categoryIndex >= 0 && categoryIndex < categories.length - 1 && categories.length >= 2) {
-
-    }
+    if (categoryIndex < data[boardIndex].categories.length - 1) {
+			data[boardIndex].categories[categoryIndex] = data[boardIndex].categories[categoryIndex + 1];
+			data[boardIndex].categories[categoryIndex + 1] = category;
+			updateData([...data])
+		}
   };
 
   const rightMost = () => {
-
+		data[boardIndex].categories.splice(categoryIndex, 1)
+		data[boardIndex].categories.push(category)
+		updateData([...data])
   };
 
   return (
@@ -123,7 +131,7 @@ const Category = ({ category, categoryIndex, boardIndex }) => {
                 >
                   {
                     items.map((item, index) => {
-                      return <Item key={index} item={item} itemIndex={index} categoryIndex={categoryIndex} boardIndex></Item>
+                      return <Item key={index} item={item} itemIndex={index} categoryIndex={categoryIndex} boardIndex={boardIndex}></Item>
                     })
                   }
                   {provided.placeholder}
