@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import SingletonStorageManager from '../localStorageScripts/boardSingleton';
 class sessionboard {
 

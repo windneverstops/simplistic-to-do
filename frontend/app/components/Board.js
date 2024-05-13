@@ -1,33 +1,35 @@
 import { useState, useEffect, useRef } from "react";
-import category from "../scripts/classes/category";
-import SingletonStorageManager from "../scripts/localStorageScripts/boardSingleton";
 import { BarLoader } from "react-spinners";
 import Key from "./Key";
 import { DragDropContext } from "@hello-pangea/dnd";
 import Category from "./Category";
 import "../styles/scroll.css"
 import React from "react";
+import { useBoardDataContext } from "../contexts/BoardProvider";
 
+const Board = ({ boardIndex }) => {
 
-
-const Board = ({ existingCategories = [], loading }) => {
-
-
+  // Data
   const [categories, setCategories] = useState([]);
+  const { data, updateData, clearBoardData, loading } = useBoardDataContext();
+
+  // Component states
   const [showInput, setShowInput] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [confirmClear, setConfirmClear] = useState(false);
+
+  // Refs
   const inputRef = useRef(null);
   const clearRef = useRef(null);
 
   // Initial loading for existingCategories
-
   useEffect(() => {
-    setCategories(existingCategories)
-  }, [loading])
+    if (data.length > 0){
+      setCategories(data[boardIndex].categories)
+    }
 
-  // For new category creation input
-
+  }, [data])
+  // Handling inputs and its logic
   useEffect(() => {
     if (showInput && inputRef.current) {
       inputRef.current.focus();
@@ -47,12 +49,10 @@ const Board = ({ existingCategories = [], loading }) => {
     const { value } = e.target;
 
     if (e.key === 'Enter') {
-      const manager = new SingletonStorageManager();
-      const newCategory = new category({ "_title": value.trim() });
-      manager.addCategory(newCategory);
-      manager.uploadToStorage();
-      categories.unshift(newCategory);
-      setCategories(categories);
+      const newCategory = { "title": value.trim(), "tasks": []}
+      const newData = [...data]
+      newData[boardIndex].categories.unshift(newCategory)
+      updateData(newData)
       setShowInput(false);
       e.target.value = ''; // Clear the input field after adding the category
     } else if (e.key === "Escape") {
@@ -72,10 +72,8 @@ const Board = ({ existingCategories = [], loading }) => {
   }
 
   const confirmRemoveCategory = () => {
-    categories.pop();
-    setCategories(categories);
-    new SingletonStorageManager().replaceCategoriesWith(categories);
-    new SingletonStorageManager().uploadToStorage();
+    data[boardIndex].categories.pop()
+    updateData([...data])
     setShowDelete(false);
   }
 
@@ -86,40 +84,25 @@ const Board = ({ existingCategories = [], loading }) => {
     if (e.destination == null) {
       return
     }
-
-    const sourceCategoryId = parseInt(e.source.droppableId)
-    const destinationCategoryId = parseInt(e.destination.droppableId)
-    const itemId = parseInt(e.draggableId)
-
-    const retCategories = [];
-
-    for (const category of categories) {
-      if (category.getId() === sourceCategoryId) {
-
-        category._itemsId = category.getItemsId().filter((id) => id !== itemId);
-      }
-      if (category.getId() === destinationCategoryId) {
-
-        category._itemsId.push(itemId);
-      }
-      retCategories.push(category);
-    }
-
-
-    setCategories(retCategories);
-    new SingletonStorageManager().replaceCategoriesWith(retCategories);
-    new SingletonStorageManager().uploadToStorage();
-
-
+    
+    const sourceCategoryIndex = parseInt(e.source.droppableId)
+    const destinationCategoryIndex = parseInt(e.destination.droppableId)
+    const itemIndex = e.draggableId.split(',').map(Number)[2]
+    const item = data[boardIndex].categories[sourceCategoryIndex].tasks[itemIndex]
+    const orderIndex = e.destination.index
+    data[boardIndex].categories[sourceCategoryIndex].tasks.splice(itemIndex, 1)
+    data[boardIndex].categories[destinationCategoryIndex].tasks.splice(orderIndex, 0, item)
+    updateData([...data])
+  
   }
 
   // For clearing the local storage
 
   const handleClearClick = () => {
     if (confirmClear) {
+      // Button
       setConfirmClear(false);
-      new SingletonStorageManager().clearStorage();
-      setCategories([]);
+      clearBoardData(boardIndex)
     } else {
       setConfirmClear(true);
     }
@@ -130,8 +113,6 @@ const Board = ({ existingCategories = [], loading }) => {
       setConfirmClear(false);
     }
   };
-
-
 
   useEffect(() => {
     if (confirmClear) {
@@ -146,7 +127,8 @@ const Board = ({ existingCategories = [], loading }) => {
 
 
   return (
-    // Loading icon
+  
+    
     (loading) ?
       <div className="flex items-center justify-center h-screen">
         <BarLoader
@@ -181,15 +163,15 @@ const Board = ({ existingCategories = [], loading }) => {
           (showDelete ? <div className="flex items-center justify-center h-full">
             <kbd className="flex flex-col items-center text-red-500 text-bold text-2xl">
               <p className="py-6 sm: px-6 hyphens-auto">
-                <p>Are you sure you want to delete the right-most category?</p>
+                Are you sure you want to delete the right-most category?
               </p>
 
               <div className="md:space-x-20 text-center flex flex-col sm:flex-row">
-                <button className="border border-2 border-red-400 bg-red-400 text-white rounded p-2 my-4" onClick={confirmRemoveCategory}>
-                  <p>Yes, delete category</p>
+                <button className="border-2 border-red-400 bg-red-400 text-white rounded p-2 my-4" onClick={confirmRemoveCategory}>
+                  Yes, delete category
                 </button>
-                <button className="border border-4 border-white text-white rounded p-2 my-4" onClick={handleCancelDelete}>
-                  <p>No, don&apos;t delete category</p>
+                <button className="border-4 border-white text-white rounded p-2 my-4" onClick={handleCancelDelete}>
+                  No, don&apos;t delete category
                 </button>
               </div>
             </kbd>
@@ -219,9 +201,7 @@ const Board = ({ existingCategories = [], loading }) => {
                           categories.map((category, index) => {
 
                             return (
-
-                              <Category key={category.getId()} categoryId={category.getId()} setCategories={setCategories} categories={categories} index={index} />
-
+                              <Category key = { index } category = { category } categoryIndex = { index } boardIndex = { boardIndex }/>
                             )
                           })
                         }
@@ -248,6 +228,7 @@ const Board = ({ existingCategories = [], loading }) => {
 
             </div>)
       )
+    
   );
 };
 
