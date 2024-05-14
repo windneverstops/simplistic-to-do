@@ -1,4 +1,5 @@
 "use client";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Board from "./components/Board"
 import BoardProvider from "./contexts/BoardProvider";
 
@@ -10,10 +11,14 @@ import BoardProvider from "./contexts/BoardProvider";
 export default function Home() {
 
 	return (
-		<main className='grow p-6 pt-12'>
-			<BoardProvider>
-				<Board boardIndex = {0}/>
-			</BoardProvider>
+		<main className='grow'>
+			
+	
+					<BoardProvider>
+						<Board boardIndex = {0}/>
+					</BoardProvider>
+			
+			
 		</main>
 	)
 }

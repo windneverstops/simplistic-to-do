@@ -84,7 +84,7 @@ const Category = ({ category, categoryIndex, boardIndex }) => {
 
   return (
     (showInput ?
-      <div className="flex items-center justify-center h-full w-[250px] min-w-[250px]">
+      <div className="flex items-center justify-center h-full w-[200px] min-w-[200px]">
         <kbd className="flex flex-col items-center">
           <input
             className="text-center whitespace-normal m-4 rounded focus:outline-none focus:ring-1 focus:ring-red-400"
@@ -114,8 +114,8 @@ const Category = ({ category, categoryIndex, boardIndex }) => {
       </div>
       :
       <>
-        <kbd className="flex flex-col h-full w-[250px] min-w-[250px]">
-          <span className="text-center text-xl font-bold text-black flex-none w-full">
+        <kbd className="flex flex-col h-full w-[200px] min-w-[200px]">
+          <span className="text-center font-bold text-black flex-none w-full">
             <Key>{category.title}</Key>
           </span>
           <div className="grow border border-1 rounded-md border-white bg-red-300 overflow-y-auto scroll p-2 overflow-x-hidden">

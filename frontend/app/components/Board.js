@@ -141,7 +141,7 @@ const Board = ({ boardIndex }) => {
       // New category input
       (
         showInput ?
-          <div className="flex items-center justify-center h-screen">
+          <div className="flex items-center justify-center h-full">
             <kbd className="flex flex-col items-center">
               <input
                 className="text-center whitespace-normal m-4 rounded focus:outline-none focus:ring-1 focus:ring-red-400"
